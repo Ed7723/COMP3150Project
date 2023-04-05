@@ -3,7 +3,12 @@
 To run, have python installed(link below)
 https://www.python.org/downloads/
 
-Then, setup your virtual environment and run the following command to install all dependencies:
+Then, setup your virtual environment:
+python3 -m venv venv
+Activate virtual environment
+. venv/bin/activate
+
+Run the following command to install all dependencies:
 pip install -r requirements.txt
 
 To start the app run the following command:

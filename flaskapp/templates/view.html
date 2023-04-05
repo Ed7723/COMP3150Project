@@ -4,17 +4,17 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Hospital ID</th>
-                <th>Hospital Name</th>
-                <th>Capacity</th>
+                {% for heading in headings%}
+                <th>{{ heading }}</th>
+                {% endfor %}
             </tr>
         </thead>
         <tbody>
-            {% for hospital in hospitals %}
+            {% for query in queries %}
                 <tr>
-                    <td>{{ hospital[0] }}</td>
-                    <td>{{ hospital[1] }}</td>
-                    <td>{{ hospital[2] }}</td>
+                    {% for i in range(num_fields)%}
+                        <td>{{ query[i] }}</td>
+                    {% endfor %}
                 </tr>
             {% endfor %}
         </tbody>

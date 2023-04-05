@@ -2,7 +2,7 @@
 {% extends "base.html" %}
 {% block content %}
 <!-- Basic form imported from bootstrap -->
-<form method = "POST" action="" novalidate>
+<form method = "POST" action="">
     <!-- Hidden tags adds CSRF token to help with form security -->
     {{ form.hidden_tag() }}
     <!-- This is how forms are setup using flask-wtf -->

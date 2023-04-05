@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method = "POST" action="{{ url_for('view') }}">
+    <!-- Hidden tags adds CSRF token to help with form security -->
+    {{ form.hidden_tag() }}
+    <!-- This is how forms are setup using flask-wtf -->
+    <div class="form-group mb-3">
+        {{ form.selectTable.label(class="form-label",text="Choose the table you want to view") }}
+        {{ form.selectTable(class="form-select",id="selectTable") }}
+    </div>
+    <div class="form-group">
+        {{ form.submit(class = "btn btn-primary",type="submit") }}
+    </div>
+</form>
+
+{% endblock %}

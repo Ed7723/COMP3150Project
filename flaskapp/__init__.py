@@ -2,16 +2,16 @@ from flask import Flask,render_template,flash,redirect,url_for
 from flask_sqlalchemy import SQLAlchemy
 import mysql.connector
 from flask_wtf import FlaskForm
-from wtforms import StringField,SubmitField,IntegerField
+from wtforms import StringField,SubmitField,IntegerField, SelectField
 from wtforms.validators import DataRequired,Length,NumberRange
 
 app = Flask(__name__)
-
+# Change password
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:<password>@localhost/covid-19_Schema"
 app.config["SECRET_KEY"] = "38c87e6b7a0de1c82f109db695f1175f43ba70d4d98251ed00b3b8d6932f2f5d"
 
 db = SQLAlchemy(app)
-
+#Change password
 mydb = mysql.connector.connect(
             host = "localhost",
             user = "root",
@@ -35,17 +35,30 @@ class createForm(FlaskForm):
     hosName = StringField('hosName',validators =[DataRequired(),Length(max=40)])
     hosCap = IntegerField('hosCap',validators =[DataRequired(),NumberRange(min=0, max=15, message='Improper Input')])
     submit = SubmitField('Add item')
-        
-class editForm(FlaskForm):
-    hosName = StringField('hosName',validators =[DataRequired(),Length(max=40)])
-    hosCap = IntegerField('hosCap',validators =[DataRequired(),NumberRange(min=0, max=15, message='Improper Input')])
-    submit = SubmitField('Edit item')
+
+class selectDB(FlaskForm):
+    selectTable = SelectField(u'Choose database', 
+    choices=[
+        ('Hospital', 'Hospital'),
+        ('Covid Case', 'Covid Case'),
+        ('Covid Case Record', 'Covid Case Record'),
+        ('Covid Test', 'Covid Test'),
+        ('Covid Vaccine', 'Covid Vaccine'),
+        ('Hospitilization', 'Hospitilization'),
+        ('Patient', 'Patient'),
+        ('Positive Test', 'Positive Test'),
+        ('Province', 'Province'),
+        ('Region', 'Region'),
+        ('Vaccination Record', 'Vaccination Record'),
+        ])
+    submit = SubmitField('Select')
 
 # Routing Section
 # Home route, renders home.html
 @app.route("/")
 def home():
-    return render_template("view.html", title = 'Homepage')
+    form = selectDB()
+    return render_template("home.html", title = 'Homepage',form = form)
 
 @app.route("/create",methods = ['GET','POST'])
 def create():
@@ -61,16 +74,11 @@ def create():
     return render_template("create.html", title = 'Create Records',form = form)
 
 # View route, renders view.html. Allows looking at items.
-@app.route("/view")
+@app.route("/view",methods = ['GET','POST'])
 def view():
-    cursor.execute("SELECT * FROM `covid-19_Schema`.Hospital;")
-    data = cursor.fetchall()
-    return render_template("view.html", title = 'View Records',hospitals =data)
-
-# @app.route('/edit/<int:hospital_id>', methods=['GET', 'POST'])
-# def edit(field):
-#     return render_template('edit.html' ,title = 'Edit Records')
-
-# @app.route('/delete/<int:hospital_id>', methods=['POST'])
-# def delete(field):
-#     return redirect(url_for('view'))
+    form = selectDB()
+    cursor.execute(f"SELECT * FROM `covid-19_Schema`.`{form.selectTable.data}`;")
+    queryData = cursor.fetchall()
+    num_fields = len(cursor.description)
+    field_names = [i[0] for i in cursor.description]
+    return render_template("view.html", title = 'View Records', queries=queryData, headings=field_names,num_fields=num_fields)

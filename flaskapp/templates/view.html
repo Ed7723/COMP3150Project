@@ -1,27 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>View Items</h1>
+    <h1>View Records</h1>
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Action</th>
+                <th>Hospital ID</th>
+                <th>Hospital Name</th>
+                <th>Capacity</th>
             </tr>
         </thead>
         <tbody>
-            {% for item in items %}
+            {% for hospital in hospitals %}
                 <tr>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.price }}</td>
-                    <td>
-                      <a href="{{ url_for('edit', item_id=item.id) }}" class="btn btn-primary">Edit</a>
-                      <form method="POST" action="{{ url_for('delete', item_id=item.id) }}" style="display: inline-block;">
-                        <input type="submit" class="btn btn-danger" value="Delete">
-                      </form>
-                    </td>
+                    <td>{{ hospital[0] }}</td>
+                    <td>{{ hospital[1] }}</td>
+                    <td>{{ hospital[2] }}</td>
                 </tr>
             {% endfor %}
         </tbody>

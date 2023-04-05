@@ -19,16 +19,6 @@ mydb = mysql.connector.connect(
         )
 
 cursor = mydb.cursor()  
-
-# Models Section
-class Hospital(db.Model):
-    id = db.Column(db.Integer,primary_key = True)
-    name = db.Column(db.String(40),unique = True,nullable = False)
-    capacity = db.Column(db.Integer,nullable = False)
-
-    def __repr__(self):
-        return f"Name:('{self.name}, capacity: {self.capacity})"
-
 # Forms Section
 
 class createForm(FlaskForm):
